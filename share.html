@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoVault - Share & Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+        
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        
+        .qr-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .qr-label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        .link-section {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .link-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .link-value {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-family: monospace;
+            font-size: 13px;
+            word-break: break-all;
+            margin-bottom: 10px;
+            color: #00d084;
+        }
+        
+        .credentials {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+        
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .credential-item:last-child {
+            border-bottom: none;
+        }
+        
+        .credential-label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .credential-value {
+            font-weight: 600;
+            color: #667eea;
+            font-family: monospace;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            text-decoration: none;
+            text-align: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .features {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .features h3 {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #667eea;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .feature-icon {
+            min-width: 20px;
+        }
+        
+        .instruction {
+            background: rgba(0, 208, 132, 0.1);
+            border: 1px solid rgba(0, 208, 132, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        
+        .copy-btn {
+            background: none;
+            border: none;
+            color: #00d084;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: underline;
+            padding: 0;
+            margin-left: auto;
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                padding: 20px;
+            }
+            
+            .logo-text {
+                font-size: 22px;
+            }
+            
+            h1 {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-icon">💎</div>
+                    <div class="logo-text">CryptoVault</div>
+                </div>
+                <h1>Demo & Share</h1>
+                <p class="subtitle">Professional Crypto Trading Platform</p>
+            </div>
+
+            <div class="qr-section">
+                <div class="qr-label">Scan to Test</div>
+                <div class="qr-code" id="qrCode">
+                    📱
+                </div>
+            </div>
+
+            <div class="link-section">
+                <div class="link-label">Local Demo Link</div>
+                <div class="link-value">http://localhost:3000</div>
+            </div>
+
+            <div class="credentials">
+                <div class="credential-item">
+                    <span class="credential-label">Email:</span>
+                    <span class="credential-value">demo@example.com</span>
+                </div>
+                <div class="credential-item">
+                    <span class="credential-label">Password:</span>
+                    <span class="credential-value">demo123</span>
+                </div>
+            </div>
+
+            <div class="instruction">
+                <strong>🚀 Quick Start:</strong><br>
+                1. Open http://localhost:3000 in your browser<br>
+                2. Use credentials above or sign up<br>
+                3. Explore all features and test the platform
+            </div>
+
+            <div class="features">
+                <h3>✨ Features</h3>
+                <div class="feature-item"><div class="feature-icon">💳</div> Buy & Sell Crypto</div>
+                <div class="feature-item"><div class="feature-icon">💰</div> 7 Cryptocurrencies</div>
+                <div class="feature-item"><div class="feature-icon">🌍</div> Multi-Currency Support</div>
+                <div class="feature-item"><div class="feature-icon">📈</div> Staking & Earning</div>
+                <div class="feature-item"><div class="feature-icon">💎</div> Professional Dashboard</div>
+                <div class="feature-item"><div class="feature-icon">🔄</div> Instant Swaps</div>
+            </div>
+
+            <a href="http://localhost:3000" class="btn">🚀 Launch Demo</a>
+            <button class="btn btn-secondary" onclick="generateQR()">📸 Generate QR Code</button>
+
+            <div class="instruction" style="margin-top: 20px;">
+                <strong>📡 For Remote Sharing:</strong><br>
+                To share with others remotely, use:<br>
+                • <strong>ngrok:</strong> ngrok http 3000<br>
+                • <strong>Vercel:</strong> Deploy from GitHub<br>
+                • <strong>Heroku:</strong> One-click deploy<br>
+                • <strong>AWS:</strong> EC2 instance
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Generate QR Code using QR Server API
+        function generateQR() {
+            const url = 'http://localhost:3000';
+            const qrSize = '200x200';
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}&data=${encodeURIComponent(url)}`;
+            
+            const qrElement = document.getElementById('qrCode');
+            qrElement.innerHTML = `<img src="${qrUrl}" alt="QR Code" style="width: 100%; height: 100%; object-fit: contain;">`;
+            
+            showNotification('✅ QR Code generated!');
+        }
+
+        function showNotification(msg) {
+            const n = document.createElement('div');
+            n.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: rgba(0, 208, 132, 0.2);
+                border: 1px solid #00d084;
+                color: #00d084;
+                padding: 15px 20px;
+                border-radius: 10px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            n.textContent = msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        // Auto-generate QR on load
+        window.addEventListener('load', () => {
+            // Small delay to ensure page is ready
+            setTimeout(generateQR, 500);
+        });
+    </script>
+</body>
+</html>

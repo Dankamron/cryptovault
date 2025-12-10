@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CryptoVault - Professional Crypto Trading Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .auth-container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        .auth-card {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        input[type="email"],
+        input[type="password"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            font-size: 13px;
+        }
+
+        .checkbox {
+            display: flex;
+            align-items: center;
+        }
+
+        .checkbox input {
+            margin-right: 6px;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .forgot-link {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .forgot-link:hover {
+            color: #764ba2;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .signup-link a:hover {
+            color: #764ba2;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .header-title h1 {
+            text-align: left;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .balance-card {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+        }
+
+        .balance-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .balance-amount {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .balance-change {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .change-item {
+            font-size: 14px;
+            color: #00d084;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            transform: translateY(-5px);
+        }
+
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .main-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+            overflow-x: auto;
+        }
+
+        .main-tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .main-tab.active {
+            color: #fff;
+        }
+
+        .main-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .tab-content {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .tab-content.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 500px;
+            width: 90%;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            padding: 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 22px;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        /* Assets */
+        .asset-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .asset-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .asset-item:hover {
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .asset-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .asset-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .asset-details h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .asset-symbol {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+        }
+
+        .asset-price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .price-amount {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .price-change {
+            font-size: 13px;
+            color: #00d084;
+        }
+
+        /* Wallet */
+        .wallet-card {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .wallet-address {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 13px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .wallet-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .wallet-action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 15px;
+            cursor: pointer;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .wallet-action-btn:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            transform: translateY(-5px);
+        }
+
+        .wallet-action-btn .icon {
+            font-size: 28px;
+        }
+
+        /* Transactions */
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .transaction-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .transaction-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background: rgba(102, 126, 234, 0.2);
+        }
+
+        .transaction-details h4 {
+            margin: 0;
+            margin-bottom: 3px;
+            font-size: 15px;
+        }
+
+        .transaction-time {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 12px;
+        }
+
+        .transaction-amount {
+            text-align: right;
+        }
+
+        .transaction-amount .amount {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .transaction-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            background: rgba(0, 208, 132, 0.1);
+            color: #00d084;
+        }
+
+        .transaction-status.pending {
+            background: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 2000;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .notification.success {
+            background: rgba(0, 208, 132, 0.2);
+            border: 1px solid #00d084;
+            color: #00d084;
+        }
+
+        .notification.error {
+            background: rgba(255, 0, 0, 0.2);
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+
+        /* Staking */
+        .staking-package {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .staking-package:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(102, 126, 234, 0.3);
+        }
+
+        .staking-package h4 {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .package-info {
+            margin-bottom: 15px;
+        }
+
+        .package-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .package-item label {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .package-value {
+            color: #00d084;
+            font-weight: 600;
+        }
+
+        .btn-stake {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: #fff;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .balance-amount {
+                font-size: 32px;
+            }
+            .action-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .auth-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="container">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo">
+                    <div class="logo-icon">💎</div>
+                    <div class="logo-text">CryptoVault</div>
+                </div>
+                <h1>Welcome Back</h1>
+                <p class="subtitle">Login to your crypto portfolio</p>
+                
+                <form onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="••••••••" required>
+                    </div>
+                    
+                    <div class="remember-forgot">
+                        <label class="checkbox">
+                            <input type="checkbox">
+                            Remember me
+                        </label>
+                        <a class="forgot-link" onclick="showForgotPassword()">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Sign In</button>
+                </form>
+                
+                <div class="signup-link">
+                    Don't have an account? <a onclick="showSignup()">Sign up free</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Page -->
+    <div id="forgotPasswordPage" class="container hidden">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo">
+                    <div class="logo-icon">🔐</div>
+                    <div class="logo-text">CryptoVault</div>
+                </div>
+                <h1>Reset Password</h1>
+                <p class="subtitle">Enter your email to receive reset instructions</p>
+                
+                <form onsubmit="handleForgotPassword(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="forgotEmail" placeholder="you@example.com" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                </form>
+                
+                <button class="btn btn-secondary" onclick="showLogin()">Back to Login</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="signupPage" class="container hidden">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="logo">
+                    <div class="logo-icon">🚀</div>
+                    <div class="logo-text">CryptoVault</div>
+                </div>
+                <h1>Create Account</h1>
+                <p class="subtitle">Join millions of crypto investors</p>
+                
+                <form onsubmit="handleSignup(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="signupName" placeholder="Your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="••••••••" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Create Account</button>
+                </form>
+                
+                <div class="signup-link">
+                    Already have an account? <a onclick="showLogin()">Sign in</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="container hidden">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <div class="header-title">
+                    <h1>Portfolio</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-logout" onclick="handleLogout()">Logout</button>
+                </div>
+            </div>
+
+            <div class="main-tabs">
+                <button class="main-tab active" onclick="switchTab('portfolio')">Portfolio</button>
+                <button class="main-tab" onclick="switchTab('wallet')">Wallet</button>
+                <button class="main-tab" onclick="switchTab('trade')">Trade</button>
+                <button class="main-tab" onclick="switchTab('staking')">Staking</button>
+                <button class="main-tab" onclick="switchTab('transactions')">Activity</button>
+            </div>
+
+            <!-- Portfolio Tab -->
+            <div id="portfolioTab" class="tab-content">
+                <div class="balance-card">
+                    <div class="balance-label">Total Balance</div>
+                    <div class="balance-amount" id="totalBalance">€0.00</div>
+                    <div class="balance-change">
+                        <div class="change-item">Real-time balance</div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button class="action-btn" onclick="showBuyModal()">
+                            <div class="action-icon">💳</div>
+                            <span>Buy</span>
+                        </button>
+                        <button class="action-btn" onclick="showSellModal()">
+                            <div class="action-icon">📤</div>
+                            <span>Sell</span>
+                        </button>
+                        <button class="action-btn" onclick="showDepositModal()">
+                            <div class="action-icon">📥</div>
+                            <span>Deposit</span>
+                        </button>
+                        <button class="action-btn" onclick="showWithdrawModal()">
+                            <div class="action-icon">💸</div>
+                            <span>Withdraw</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-title">Your Holdings</div>
+                    <div id="assetList" class="asset-list"></div>
+                </div>
+            </div>
+
+            <!-- Wallet Tab -->
+            <div id="walletTab" class="tab-content hidden">
+                <h2 style="margin-bottom: 20px; font-size: 24px;">Wallet Management</h2>
+                <div class="wallet-card">
+                    <h3 style="margin-bottom: 15px;">Your Wallet Address</h3>
+                    <div class="wallet-address" id="walletAddress">-</div>
+                    <button class="btn-copy" onclick="copyToClipboard()">Copy Address</button>
+                </div>
+
+                <div class="wallet-actions" style="margin-top: 25px;">
+                    <button class="wallet-action-btn" onclick="showReceiveModal()">
+                        <div class="icon">📥</div>
+                        <span>Receive</span>
+                    </button>
+                    <button class="wallet-action-btn" onclick="showSendModal()">
+                        <div class="icon">📤</div>
+                        <span>Send</span>
+                    </button>
+                    <button class="wallet-action-btn" onclick="showSwapModal()">
+                        <div class="icon">🔄</div>
+                        <span>Swap</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Trade Tab -->
+            <div id="tradeTab" class="tab-content hidden">
+                <h2 style="margin-bottom: 20px; font-size: 24px;">Buy & Sell Crypto</h2>
+                <div class="action-buttons" style="max-width: 600px;">
+                    <button class="action-btn" style="padding: 40px; flex: 1;" onclick="showBuyModal()">
+                        <div class="action-icon">💳</div>
+                        <span>Buy Crypto</span>
+                    </button>
+                    <button class="action-btn" style="padding: 40px; flex: 1;" onclick="showSellModal()">
+                        <div class="action-icon">📤</div>
+                        <span>Sell Crypto</span>
+                    </button>
+                    <button class="action-btn" style="padding: 40px; flex: 1;" onclick="showSwapModal()">
+                        <div class="action-icon">🔄</div>
+                        <span>Swap Tokens</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Staking Tab -->
+            <div id="stakingTab" class="tab-content hidden">
+                <h2 style="margin-bottom: 20px; font-size: 24px;">Staking & Earning</h2>
+                <div id="stakingPackagesList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;"></div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div id="transactionsTab" class="tab-content hidden">
+                <h2 style="margin-bottom: 20px; font-size: 24px;">Transaction History</h2>
+                <div id="transactionsList" style="display: flex; flex-direction: column; gap: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Buy Modal -->
+    <div id="buyModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Buy Crypto</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select Cryptocurrency</label>
+                    <select id="buyCrypto">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="XRP">Ripple (XRP)</option>
+                        <option value="ADA">Cardano (ADA)</option>
+                        <option value="SOL">Solana (SOL)</option>
+                        <option value="DOGE">Dogecoin (DOGE)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount (<span id="buyAmountCurrency">USD</span>)</label>
+                    <input type="number" id="buyAmount" placeholder="Enter amount" min="1" step="0.01">
+                </div>
+                <button class="btn btn-primary" onclick="executeBuy()">Confirm Purchase</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sell Modal -->
+    <div id="sellModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Sell Crypto</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Select Cryptocurrency</label>
+                    <select id="sellCrypto">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="XRP">Ripple (XRP)</option>
+                        <option value="ADA">Cardano (ADA)</option>
+                        <option value="SOL">Solana (SOL)</option>
+                        <option value="DOGE">Dogecoin (DOGE)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount (<span id="sellAmountCurrency">USD</span>)</label>
+                    <input type="number" id="sellAmount" placeholder="Enter amount" min="1" step="0.01">
+                </div>
+                <button class="btn btn-primary" onclick="executeSell()">Confirm Sale</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div id="depositModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Deposit Funds</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: rgba(102, 126, 234, 0.1); border: 1px solid rgba(102, 126, 234, 0.3); border-radius: 10px; padding: 15px; margin-bottom: 20px;">
+                    <p style="font-size: 13px; color: rgba(255,255,255,0.8); margin-bottom: 10px;"><strong>📍 Deposit Instructions:</strong></p>
+                    <p style="font-size: 12px; color: rgba(255,255,255,0.6); margin-bottom: 10px;">Send funds to the wallet address below. Minimum deposit: $10 USD or equivalent.</p>
+                    <div style="background: rgba(0,0,0,0.2); padding: 10px; border-radius: 8px; margin-bottom: 10px;">
+                        <p style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px;">Wallet Address:</p>
+                        <p id="depositWalletAddress" style="font-size: 12px; font-family: monospace; word-break: break-all; color: #00d084; font-weight: 600;">-</p>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; font-size: 12px; padding: 8px;" onclick="copyDepositAddress()">Copy Address</button>
+                </div>
+                <div class="form-group">
+                    <label>Amount to Add (<span id="depositCurrency">USD</span>)</label>
+                    <input type="number" id="depositAmount" placeholder="e.g., 100" min="10" step="0.01">
+                </div>
+                <p style="font-size: 12px; color: rgba(255,255,255,0.5); text-align: center; margin-bottom: 15px;">After sending funds, click below to submit your deposit.</p>
+                <button class="btn btn-primary" onclick="executeDeposit()">📤 Submit Deposit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div id="withdrawModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Withdraw Funds</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Amount (<span id="withdrawCurrency">USD</span>)</label>
+                    <input type="number" id="withdrawAmount" placeholder="Enter amount" min="10" step="0.01">
+                </div>
+                <button class="btn btn-primary" onclick="executeWithdraw()">Submit Withdrawal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Receive Modal -->
+    <div id="receiveModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Receive Crypto</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px; color: rgba(255,255,255,0.7);">Send crypto to this address:</p>
+                <div class="wallet-address" id="receiveAddress">-</div>
+                <button class="btn btn-primary" onclick="copyToClipboard()">Copy Address</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Modal -->
+    <div id="sendModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Send Crypto</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Cryptocurrency</label>
+                    <select id="sendCrypto">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Recipient Address</label>
+                    <input type="text" id="recipientAddress" placeholder="Enter wallet address" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="sendAmount" placeholder="Enter amount" min="0.001" step="0.001">
+                </div>
+                <button class="btn btn-primary" onclick="executeSend()">Send Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swap Modal -->
+    <div id="swapModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Swap Tokens</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>From</label>
+                    <select id="swapFrom">
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                    </select>
+                    <input type="number" id="swapFromAmount" placeholder="Amount to swap" step="0.001" style="margin-top: 8px;">
+                </div>
+                <div style="text-align: center; margin: 15px 0; font-size: 24px;">🔄</div>
+                <div class="form-group">
+                    <label>To</label>
+                    <select id="swapTo">
+                        <option value="ETH">Ethereum (ETH)</option>
+                        <option value="BTC">Bitcoin (BTC)</option>
+                        <option value="USDT">Tether (USDT)</option>
+                    </select>
+                    <input type="number" id="swapToAmount" placeholder="You will receive" readonly style="margin-top: 8px;">
+                </div>
+                <button class="btn btn-primary" onclick="executeSwap()">Confirm Swap</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staking Modal -->
+    <div id="stakingModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Start Staking</h2>
+                <button class="modal-close" onclick="closeModals()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="stakingDetails" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; margin-bottom: 20px;"></div>
+                <div class="form-group">
+                    <label>Amount to Stake (<span id="stakingCurrency">USD</span>)</label>
+                    <input type="number" id="stakingAmount" placeholder="Enter amount" min="100" step="0.01">
+                </div>
+                <button class="btn btn-primary" onclick="executeStaking()">Confirm Staking</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CONFIG - UPDATE YOUR WALLET ADDRESS HERE
+        const CONFIG = {
+            MERCHANT_WALLET: '3J98t1WpEZ73CNmYviecrnyiWrnqRhWNLy', // Random Bitcoin address for demo
+            DEPOSIT_INSTRUCTIONS: 'Send funds to the wallet address shown above. Minimum deposit: $10 USD (or equivalent)',
+            CURRENCY: 'USD', // 'USD', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD'
+            CRYPTO_PRICES: {
+                BTC: 95000,
+                ETH: 3500,
+                USDT: 1,
+                XRP: 2.15,
+                ADA: 0.95,
+                SOL: 180,
+                DOGE: 0.38
+            },
+            EXCHANGE_RATES: {
+                USD: 1,
+                EUR: 0.92,
+                GBP: 0.79,
+                JPY: 150,
+                AUD: 1.55,
+                CAD: 1.39
+            }
+        };
+
+        let users = [
+            { email: 'demo@example.com', password: 'demo123', name: 'John Doe' }
+        ];
+
+        let currentUser = null;
+        let userBalances = {};
+        let transactions = {};
+        let userStaking = {};
+
+        const stakingPlans = [
+            { id: 1, name: 'Basic Plan', minAmount: 100, apy: 12, duration: '30 days', days: 30 },
+            { id: 2, name: 'Pro Plan', minAmount: 500, apy: 18, duration: '60 days', days: 60 },
+            { id: 3, name: 'Elite Plan', minAmount: 1000, apy: 25, duration: '90 days', days: 90 }
+        ];
+
+        // INITIALIZATION
+        function initializeUser(email) {
+            if (!userBalances[email]) {
+                userBalances[email] = {
+                    total: 0,
+                    BTC: { amount: 0, value: 0 },
+                    ETH: { amount: 0, value: 0 },
+                    USDT: { amount: 0, value: 0 },
+                    XRP: { amount: 0, value: 0 },
+                    ADA: { amount: 0, value: 0 },
+                    SOL: { amount: 0, value: 0 },
+                    DOGE: { amount: 0, value: 0 }
+                };
+            }
+            if (!transactions[email]) transactions[email] = [];
+            if (!userStaking[email]) userStaking[email] = [];
+        }
+
+        // PAGE NAVIGATION
+        function showPage(pageId) {
+            ['loginPage', 'forgotPasswordPage', 'signupPage', 'dashboardPage'].forEach(p => {
+                document.getElementById(p).classList.add('hidden');
+            });
+            document.getElementById(pageId).classList.remove('hidden');
+        }
+
+        function showLogin() { showPage('loginPage'); }
+        function showForgotPassword() { showPage('forgotPasswordPage'); }
+        function showSignup() { showPage('signupPage'); }
+        function showDashboard() {
+            showPage('dashboardPage');
+            updateDashboard();
+        }
+
+        // TAB SWITCHING
+        function switchTab(tabName) {
+            document.querySelectorAll('[id$="Tab"]').forEach(tab => tab.classList.add('hidden'));
+            document.querySelectorAll('.main-tab').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            event.target.classList.add('active');
+
+            if (tabName === 'portfolio') loadAssets();
+            if (tabName === 'staking') loadStakingPackages();
+            if (tabName === 'transactions') loadTransactions();
+        }
+
+        // DASHBOARD
+        function updateDashboard() {
+            if (!currentUser) return;
+            const balance = userBalances[currentUser.email];
+            const rate = CONFIG.EXCHANGE_RATES[CONFIG.CURRENCY];
+            const totalInCurrency = balance.total * rate;
+            document.getElementById('totalBalance').textContent = getCurrencySymbol() + totalInCurrency.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            document.getElementById('walletAddress').textContent = CONFIG.MERCHANT_WALLET;
+            document.getElementById('receiveAddress').textContent = CONFIG.MERCHANT_WALLET;
+            loadAssets();
+            loadTransactions();
+        }
+
+        function loadAssets() {
+            if (!currentUser) return;
+            const balance = userBalances[currentUser.email];
+            const assetList = document.getElementById('assetList');
+            const rate = CONFIG.EXCHANGE_RATES[CONFIG.CURRENCY];
+            
+            const assets = [
+                { name: 'Bitcoin', symbol: 'BTC', icon: '₿', color: '#f7931a', amount: balance.BTC.amount, price: CONFIG.CRYPTO_PRICES.BTC },
+                { name: 'Ethereum', symbol: 'ETH', icon: 'Ξ', color: '#627eea', amount: balance.ETH.amount, price: CONFIG.CRYPTO_PRICES.ETH },
+                { name: 'Tether', symbol: 'USDT', icon: '₮', color: '#26a17b', amount: balance.USDT.amount, price: CONFIG.CRYPTO_PRICES.USDT },
+                { name: 'Ripple', symbol: 'XRP', icon: '✕', color: '#23292f', amount: balance.XRP.amount, price: CONFIG.CRYPTO_PRICES.XRP },
+                { name: 'Cardano', symbol: 'ADA', icon: '₳', color: '#0033ad', amount: balance.ADA.amount, price: CONFIG.CRYPTO_PRICES.ADA },
+                { name: 'Solana', symbol: 'SOL', icon: '◎', color: '#9945ff', amount: balance.SOL.amount, price: CONFIG.CRYPTO_PRICES.SOL },
+                { name: 'Dogecoin', symbol: 'DOGE', icon: '🐕', color: '#c1a94b', amount: balance.DOGE.amount, price: CONFIG.CRYPTO_PRICES.DOGE }
+            ];
+
+            assetList.innerHTML = assets.map(asset => {
+                const value = asset.amount * asset.price * rate;
+                return `
+                    <div class="asset-item">
+                        <div class="asset-info">
+                            <div class="asset-icon" style="background: rgba(${hexToRgb(asset.color)}, 0.2); color: ${asset.color};">${asset.icon}</div>
+                            <div class="asset-details">
+                                <h3>${asset.name}</h3>
+                                <div class="asset-symbol">${asset.amount.toFixed(8)} ${asset.symbol}</div>
+                            </div>
+                        </div>
+                        <div class="asset-price">
+                            <div class="price-amount">${getCurrencySymbol()}${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                            <div class="price-change">↑ +${(Math.random() * 5).toFixed(2)}%</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadTransactions() {
+            if (!currentUser) return;
+            const txList = transactions[currentUser.email] || [];
+            const transactionsList = document.getElementById('transactionsList');
+            
+            if (txList.length === 0) {
+                transactionsList.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.5);">No transactions yet</p>';
+                return;
+            }
+            
+            transactionsList.innerHTML = txList.map(tx => `
+                <div class="transaction-item">
+                    <div class="transaction-info">
+                        <div class="transaction-icon">${{ deposit: '📥', buy: '💳', sell: '📤', withdrawal: '💸', transfer: '🔄' }[tx.type] || '📊'}</div>
+                        <div class="transaction-details">
+                            <h4>${tx.type.charAt(0).toUpperCase() + tx.type.slice(1)}</h4>
+                            <div class="transaction-time">${tx.date}</div>
+                        </div>
+                    </div>
+                    <div class="transaction-amount">
+                        <div class="amount">€${tx.amount} ${tx.currency}</div>
+                        <div class="transaction-status ${tx.status}">${tx.status}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadStakingPackages() {
+            const packagesList = document.getElementById('stakingPackagesList');
+            packagesList.innerHTML = stakingPlans.map(plan => `
+                <div class="staking-package" onclick="selectStakingPlan(${plan.id})">
+                    <h4>${plan.name}</h4>
+                    <div class="package-info">
+                        <div class="package-item">
+                            <label>APY</label>
+                            <span class="package-value">${plan.apy}%</span>
+                        </div>
+                        <div class="package-item">
+                            <label>Min Amount</label>
+                            <span class="package-value">€${plan.minAmount}</span>
+                        </div>
+                        <div class="package-item">
+                            <label>Duration</label>
+                            <span class="package-value">${plan.duration}</span>
+                        </div>
+                    </div>
+                    <button class="btn-stake">Start Staking</button>
+                </div>
+            `).join('');
+        }
+
+        // MODALS
+        function closeModals() {
+            document.querySelectorAll('.modal').forEach(m => m.classList.add('hidden'));
+        }
+
+        function showBuyModal() { closeModals(); document.getElementById('buyModal').classList.remove('hidden'); }
+        function showSellModal() { closeModals(); document.getElementById('sellModal').classList.remove('hidden'); }
+        function showDepositModal() { closeModals(); document.getElementById('depositModal').classList.remove('hidden'); }
+        function showWithdrawModal() { closeModals(); document.getElementById('withdrawModal').classList.remove('hidden'); }
+        function showReceiveModal() { closeModals(); document.getElementById('receiveModal').classList.remove('hidden'); }
+        function showSendModal() { closeModals(); document.getElementById('sendModal').classList.remove('hidden'); }
+        function showSwapModal() { closeModals(); document.getElementById('swapModal').classList.remove('hidden'); }
+
+        // TRANSACTIONS
+        function addTransaction(type, amount, currency, status = 'confirmed') {
+            if (!currentUser) return;
+            transactions[currentUser.email].unshift({ type, amount, currency, date: new Date().toISOString().split('T')[0], status });
+        }
+
+        function executeBuy() {
+            if (!currentUser) return showError('Please login first');
+            const crypto = document.getElementById('buyCrypto').value;
+            const amount = parseFloat(document.getElementById('buyAmount').value);
+            const balance = userBalances[currentUser.email];
+            const rate = CONFIG.EXCHANGE_RATES[CONFIG.CURRENCY];
+            
+            if (!amount || amount < 1) return showError('Minimum ' + getCurrencySymbol() + '1');
+            if (balance.total < amount) return showError('Insufficient balance. Deposit funds first.');
+            
+            const cryptoAmount = amount / CONFIG.CRYPTO_PRICES[crypto];
+            balance.total -= amount;
+            balance[crypto].amount += cryptoAmount;
+            balance[crypto].value += amount;
+            addTransaction('buy', cryptoAmount.toFixed(8), crypto);
+            
+            closeModals();
+            document.getElementById('buyAmount').value = '';
+            updateDashboard();
+            showSuccess(`Purchased ${cryptoAmount.toFixed(8)} ${crypto}`);
+        }
+
+        function executeSell() {
+            if (!currentUser) return showError('Please login first');
+            const crypto = document.getElementById('sellCrypto').value;
+            const amount = parseFloat(document.getElementById('sellAmount').value);
+            const balance = userBalances[currentUser.email];
+            
+            if (!amount || amount < 1) return showError('Minimum ' + getCurrencySymbol() + '1');
+            if (balance.total < amount) return showError('Insufficient balance');
+            
+            balance.total += amount;
+            balance[crypto].value = Math.max(0, balance[crypto].value - amount);
+            if (balance[crypto].value > 0) {
+                balance[crypto].amount = balance[crypto].value / CONFIG.CRYPTO_PRICES[crypto];
+            } else {
+                balance[crypto].amount = 0;
+            }
+            addTransaction('sell', amount, CONFIG.CURRENCY);
+            
+            closeModals();
+            document.getElementById('sellAmount').value = '';
+            updateDashboard();
+            showSuccess(`Sold for ${getCurrencySymbol()}${amount.toFixed(2)}`);
+        }
+
+        function executeDeposit() {
+            if (!currentUser) return showError('Please login first');
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if (!amount || amount < 10) return showError('Minimum ' + getCurrencySymbol() + '10');
+            
+            // Only add transaction as PENDING - do NOT add to balance yet
+            addTransaction('deposit', amount, CONFIG.CURRENCY, 'pending');
+            
+            closeModals();
+            document.getElementById('depositAmount').value = '';
+            updateDashboard();
+            showSuccess(`✅ Deposit of ${getCurrencySymbol()}${amount.toFixed(2)} is PENDING. You will receive confirmation once verified.`);
+        }
+
+        function executeWithdraw() {
+            if (!currentUser) return showError('Please login first');
+            const amount = parseFloat(document.getElementById('withdrawAmount').value);
+            const balance = userBalances[currentUser.email];
+            
+            if (!amount || amount < 10) return showError('Minimum ' + getCurrencySymbol() + '10');
+            if (balance.total < amount) return showError('Insufficient balance');
+            
+            balance.total -= amount;
+            addTransaction('withdrawal', amount, CONFIG.CURRENCY, 'pending');
+            
+            closeModals();
+            document.getElementById('withdrawAmount').value = '';
+            updateDashboard();
+            showSuccess(`Withdrawal of ${getCurrencySymbol()}${amount.toFixed(2)} submitted. 1-3 business days.`);
+        }
+
+        function executeSend() {
+            if (!currentUser) return showError('Please login first');
+            const recipient = document.getElementById('recipientAddress').value;
+            const amount = parseFloat(document.getElementById('sendAmount').value);
+            const crypto = document.getElementById('sendCrypto').value;
+            const balance = userBalances[currentUser.email];
+            
+            if (!recipient || recipient.length < 10) return showError('Invalid wallet address');
+            if (!amount || amount <= 0) return showError('Invalid amount');
+            if (balance[crypto].amount < amount) return showError(`Insufficient ${crypto}`);
+            
+            balance[crypto].amount -= amount;
+            balance[crypto].value -= amount * CONFIG.CRYPTO_PRICES[crypto];
+            balance.total = balance.BTC.value + balance.ETH.value + balance.USDT.value + balance.XRP.value + balance.ADA.value + balance.SOL.value + balance.DOGE.value;
+            addTransaction('transfer', amount, crypto, 'pending');
+            
+            closeModals();
+            document.getElementById('sendAmount').value = '';
+            document.getElementById('recipientAddress').value = '';
+            updateDashboard();
+            showSuccess(`Sending ${amount} ${crypto}`);
+        }
+
+        function executeSwap() {
+            if (!currentUser) return showError('Please login first');
+            const fromCrypto = document.getElementById('swapFrom').value;
+            const amount = parseFloat(document.getElementById('swapFromAmount').value);
+            const toCrypto = document.getElementById('swapTo').value;
+            const balance = userBalances[currentUser.email];
+            
+            if (!amount || amount <= 0) return showError('Invalid amount');
+            if (balance[fromCrypto].amount < amount) return showError(`Insufficient ${fromCrypto}`);
+            
+            const eurValue = amount * CONFIG.CRYPTO_PRICES[fromCrypto];
+            const toAmount = eurValue / CONFIG.CRYPTO_PRICES[toCrypto];
+            
+            balance[fromCrypto].amount -= amount;
+            balance[fromCrypto].value -= eurValue;
+            balance[toCrypto].amount += toAmount;
+            balance[toCrypto].value += eurValue;
+            addTransaction('swap', `${amount} ${fromCrypto} → ${toAmount.toFixed(8)} ${toCrypto}`, 'SWAP');
+            
+            closeModals();
+            document.getElementById('swapFromAmount').value = '';
+            updateDashboard();
+            showSuccess(`Swapped ${amount} ${fromCrypto} for ${toAmount.toFixed(8)} ${toCrypto}`);
+        }
+
+        function selectStakingPlan(planId) {
+            const plan = stakingPlans.find(p => p.id === planId);
+            document.getElementById('stakingDetails').innerHTML = `
+                <h3>${plan.name}</h3>
+                <div style="margin-top: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>APY</span><strong>${plan.apy}%</strong></div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;"><span>Min Amount</span><strong>${getCurrencySymbol()}${plan.minAmount}</strong></div>
+                    <div style="display: flex; justify-content: space-between;"><span>Duration</span><strong>${plan.duration}</strong></div>
+                </div>
+            `;
+            document.getElementById('stakingModal').dataset.planId = planId;
+            document.getElementById('stakingModal').classList.remove('hidden');
+        }
+
+        function executeStaking() {
+            if (!currentUser) return showError('Please login first');
+            const planId = parseInt(document.getElementById('stakingModal').dataset.planId);
+            const plan = stakingPlans.find(p => p.id === planId);
+            const amount = parseFloat(document.getElementById('stakingAmount').value);
+            const balance = userBalances[currentUser.email];
+            
+            if (!amount || amount < plan.minAmount) return showError(`Minimum ${getCurrencySymbol()}${plan.minAmount}`);
+            if (balance.total < amount) return showError('Insufficient balance');
+            
+            balance.total -= amount;
+            userStaking[currentUser.email].push({
+                amount, planId, planName: plan.name, apy: plan.apy,
+                startDate: new Date().toISOString().split('T')[0],
+                endDate: new Date(Date.now() + plan.days * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            });
+            addTransaction('stake', amount, CONFIG.CURRENCY);
+            
+            closeModals();
+            document.getElementById('stakingAmount').value = '';
+            updateDashboard();
+            showSuccess(`Staking activated! Earning ${plan.apy}% APY.`);
+        }
+
+        function copyToClipboard() {
+            navigator.clipboard.writeText(CONFIG.MERCHANT_WALLET);
+            showSuccess('Wallet address copied!');
+        }
+
+        // AUTH
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                initializeUser(email);
+                currentUser = user;
+                showDashboard();
+                showSuccess('Login successful!');
+            } else {
+                showError('Invalid credentials. Try demo@example.com / demo123');
+            }
+        }
+
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            showSuccess('Reset link sent!');
+            showLogin();
+        }
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirm = document.getElementById('confirmPassword').value;
+
+            if (password !== confirm) return showError('Passwords do not match');
+            if (users.find(u => u.email === email)) return showError('Email already registered');
+
+            users.push({ email, password, name });
+            initializeUser(email);
+            showSuccess('Account created! Login now.');
+            showLogin();
+        }
+
+        function handleLogout() {
+            if (confirm('Logout?')) {
+                currentUser = null;
+                showLogin();
+            }
+        }
+
+        // NOTIFICATIONS
+        function showSuccess(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification success';
+            n.textContent = '✅ ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        function showError(msg) {
+            const n = document.createElement('div');
+            n.className = 'notification error';
+            n.textContent = '❌ ' + msg;
+            document.body.appendChild(n);
+            setTimeout(() => n.remove(), 3000);
+        }
+
+        // UTILS
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '0, 0, 0';
+        }
+
+        function getCurrencySymbol() {
+            const symbols = { USD: '$', EUR: '€', GBP: '£', JPY: '¥', AUD: 'A$', CAD: 'C$' };
+            return symbols[CONFIG.CURRENCY] || '$';
+        }
+
+        function copyDepositAddress() {
+            navigator.clipboard.writeText(CONFIG.MERCHANT_WALLET);
+            showSuccess('Wallet address copied!');
+        }
+
+        function updateCurrencyLabels() {
+            const curr = CONFIG.CURRENCY;
+            document.querySelectorAll('[id$="Currency"]').forEach(el => el.textContent = curr);
+            document.getElementById('depositWalletAddress').textContent = CONFIG.MERCHANT_WALLET;
+        }
+
+        // INIT
+        document.addEventListener('DOMContentLoaded', () => {
+            updateCurrencyLabels();
+            showLogin();
+        });
+    </script>
+</body>
+</html>

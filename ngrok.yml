@@ -1,0 +1,7 @@
+version: 3
+authtoken: 36dCy1ulxEfzRJktvYimdbj2Mfn_3pqQHybjk2tsiMRv5jhD4
+tunnels:
+  cryptovault:
+    proto: http
+    addr: 3000
+    request_header_add: "ngrok-skip-browser-warning:true"
