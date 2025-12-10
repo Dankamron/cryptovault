@@ -1171,14 +1171,23 @@
             }
         };
 
-        let users = [
+        // Load users from localStorage or initialize with demo account
+        let users = JSON.parse(localStorage.getItem('novasave_users')) || [
             { email: 'demo@example.com', password: 'demo123', name: 'John Doe' }
         ];
 
         let currentUser = null;
-        let userBalances = {};
-        let transactions = {};
-        let userStaking = {};
+        let userBalances = JSON.parse(localStorage.getItem('novasave_balances')) || {};
+        let transactions = JSON.parse(localStorage.getItem('novasave_transactions')) || {};
+        let userStaking = JSON.parse(localStorage.getItem('novasave_staking')) || {};
+
+        // Save to localStorage whenever data changes
+        function saveToLocalStorage() {
+            localStorage.setItem('novasave_users', JSON.stringify(users));
+            localStorage.setItem('novasave_balances', JSON.stringify(userBalances));
+            localStorage.setItem('novasave_transactions', JSON.stringify(transactions));
+            localStorage.setItem('novasave_staking', JSON.stringify(userStaking));
+        }
 
         const stakingPlans = [
             { id: 1, name: 'Basic Plan', minAmount: 100, apy: 12, duration: '30 days', days: 30 },
@@ -1349,7 +1358,9 @@
         // TRANSACTIONS
         function addTransaction(type, amount, currency, status = 'confirmed') {
             if (!currentUser) return;
+            if (!transactions[currentUser.email]) transactions[currentUser.email] = [];
             transactions[currentUser.email].unshift({ type, amount, currency, date: new Date().toISOString().split('T')[0], status });
+            saveToLocalStorage();
         }
 
         function executeBuy() {
@@ -1370,8 +1381,9 @@
             
             closeModals();
             document.getElementById('buyAmount').value = '';
+            saveToLocalStorage();
             updateDashboard();
-            showSuccess(`Purchased ${cryptoAmount.toFixed(8)} ${crypto}`);
+            showSuccess(`✅ Purchased ${cryptoAmount.toFixed(8)} ${crypto}`);
         }
 
         function executeSell() {
@@ -1394,8 +1406,9 @@
             
             closeModals();
             document.getElementById('sellAmount').value = '';
+            saveToLocalStorage();
             updateDashboard();
-            showSuccess(`Sold for ${getCurrencySymbol()}${amount.toFixed(2)}`);
+            showSuccess(`✅ Sold for ${getCurrencySymbol()}${amount.toFixed(2)}`);
         }
 
         function executeDeposit() {
@@ -1408,6 +1421,7 @@
             
             closeModals();
             document.getElementById('depositAmount').value = '';
+            saveToLocalStorage();
             updateDashboard();
             showSuccess(`✅ Deposit of ${getCurrencySymbol()}${amount.toFixed(2)} is PENDING. You will receive confirmation once verified.`);
         }
@@ -1425,8 +1439,9 @@
             
             closeModals();
             document.getElementById('withdrawAmount').value = '';
+            saveToLocalStorage();
             updateDashboard();
-            showSuccess(`Withdrawal of ${getCurrencySymbol()}${amount.toFixed(2)} submitted. 1-3 business days.`);
+            showSuccess(`✅ Withdrawal of ${getCurrencySymbol()}${amount.toFixed(2)} submitted. 1-3 business days.`);
         }
 
         function executeSend() {
@@ -1448,8 +1463,9 @@
             closeModals();
             document.getElementById('sendAmount').value = '';
             document.getElementById('recipientAddress').value = '';
+            saveToLocalStorage();
             updateDashboard();
-            showSuccess(`Sending ${amount} ${crypto}`);
+            showSuccess(`✅ Sending ${amount} ${crypto}`);
         }
 
         function executeSwap() {
@@ -1473,8 +1489,9 @@
             
             closeModals();
             document.getElementById('swapFromAmount').value = '';
+            saveToLocalStorage();
             updateDashboard();
-            showSuccess(`Swapped ${amount} ${fromCrypto} for ${toAmount.toFixed(8)} ${toCrypto}`);
+            showSuccess(`✅ Swapped ${amount} ${fromCrypto} for ${toAmount.toFixed(8)} ${toCrypto}`);
         }
 
         function selectStakingPlan(planId) {
@@ -1511,8 +1528,9 @@
             
             closeModals();
             document.getElementById('stakingAmount').value = '';
+            saveToLocalStorage();
             updateDashboard();
-            showSuccess(`Staking activated! Earning ${plan.apy}% APY.`);
+            showSuccess(`✅ Staking activated! Earning ${plan.apy}% APY.`);
         }
 
         function copyToClipboard() {
@@ -1523,40 +1541,66 @@
         // AUTH
         function handleLogin(event) {
             event.preventDefault();
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const password = document.getElementById('loginPassword').value;
-            const user = users.find(u => u.email === email && u.password === password);
+
+            if (!email || !password) {
+                return showError('Please enter both email and password');
+            }
+
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
             
             if (user) {
-                initializeUser(email);
+                initializeUser(user.email);
                 currentUser = user;
+                localStorage.setItem('novasave_currentUser', user.email);
+                saveToLocalStorage();
                 showDashboard();
-                showSuccess('Login successful!');
+                showSuccess('✅ Login successful! Welcome back, ' + user.name);
             } else {
-                showError('Invalid credentials. Try demo@example.com / demo123');
+                showError('❌ Email or password is incorrect. Please try again or create a new account.');
             }
         }
 
         function handleForgotPassword(event) {
             event.preventDefault();
-            showSuccess('Reset link sent!');
-            showLogin();
+            const email = document.getElementById('forgotEmail').value.trim().toLowerCase();
+            
+            if (!email || !email.includes('@')) {
+                return showError('❌ Please enter a valid email');
+            }
+            
+            const user = users.find(u => u.email === email);
+            if (!user) {
+                return showError('❌ No account found with this email. Try creating a new account.');
+            }
+            
+            showSuccess('✅ Password reset link sent to ' + email + '\n\nNote: For this demo, please contact support to reset your password.');
+            setTimeout(() => showLogin(), 2000);
         }
 
         function handleSignup(event) {
             event.preventDefault();
-            const name = document.getElementById('signupName').value;
-            const email = document.getElementById('signupEmail').value;
+            const name = document.getElementById('signupName').value.trim();
+            const email = document.getElementById('signupEmail').value.trim().toLowerCase();
             const password = document.getElementById('signupPassword').value;
             const confirm = document.getElementById('confirmPassword').value;
 
-            if (password !== confirm) return showError('Passwords do not match');
-            if (users.find(u => u.email === email)) return showError('Email already registered');
+            // Validation
+            if (!name || name.length < 2) return showError('❌ Please enter a valid name');
+            if (!email || !email.includes('@')) return showError('❌ Please enter a valid email');
+            if (!password || password.length < 5) return showError('❌ Password must be at least 5 characters');
+            if (password !== confirm) return showError('❌ Passwords do not match');
+            if (users.find(u => u.email === email)) return showError('❌ This email is already registered. Try logging in instead.');
 
-            users.push({ email, password, name });
+            // Create new user
+            const newUser = { email, password, name };
+            users.push(newUser);
             initializeUser(email);
-            showSuccess('Account created! Login now.');
-            showLogin();
+            saveToLocalStorage();
+            
+            showSuccess('✅ Account created successfully! You can now login.');
+            setTimeout(() => showLogin(), 1500);
         }
 
         function handleLogout() {
