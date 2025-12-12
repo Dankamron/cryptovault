@@ -1697,6 +1697,13 @@
             initializeUser(email);
             saveToLocalStorage();
             
+            // Also save to server/MongoDB
+            fetch('/api/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, name })
+            }).catch(err => console.log('Could not sync to server'));
+            
             showSuccess('✅ Account created successfully! You can now login.');
             setTimeout(() => showLogin(), 1500);
         }
@@ -1765,7 +1772,11 @@
         function showAdminPanel() {
             document.getElementById('dashboardPage').classList.add('hidden');
             document.getElementById('adminPanel').classList.remove('hidden');
-            loadUsersTable();
+            
+            // Refresh user list from server
+            loadGlobalData().then(() => {
+                loadUsersTable();
+            });
         }
 
         function hideAdminPanel() {
