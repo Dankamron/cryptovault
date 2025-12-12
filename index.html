@@ -1146,6 +1146,65 @@
         </div>
     </div>
 
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="container hidden" style="max-width: 1200px; margin-top: 40px;">
+        <div class="dashboard">
+            <div class="dashboard-header">
+                <div class="header-title">
+                    <h1>⚙️ Admin Dashboard - Manage Users</h1>
+                </div>
+                <div class="header-actions">
+                    <button class="btn-logout" onclick="handleLogout()" style="background: #666;">← Logout</button>
+                </div>
+            </div>
+
+            <div style="margin: 30px 0;">
+                <h2 style="margin-bottom: 20px; font-size: 24px;">👥 All Users</h2>
+                
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid rgba(102,126,234,0.3);">
+                                <th style="padding: 15px; text-align: left;">Email</th>
+                                <th style="padding: 15px; text-align: left;">Name</th>
+                                <th style="padding: 15px; text-align: center;">Balance</th>
+                                <th style="padding: 15px; text-align: center;">Interest Earned</th>
+                                <th style="padding: 15px; text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update User Modal -->
+    <div id="updateUserModal" class="modal hidden" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center;">
+        <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 20px; padding: 40px; border: 1px solid rgba(255,255,255,0.2); max-width: 450px; width: 90%;">
+            <h2 style="margin-bottom: 10px;">Update User Account</h2>
+            <div style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+                <strong id="updateUserEmail"></strong><br>
+                <span id="updateUserName"></span>
+            </div>
+            
+            <div class="form-group">
+                <label>Balance (USD)</label>
+                <input type="number" id="updateBalance" placeholder="Enter balance" step="0.01" min="0">
+            </div>
+            
+            <div class="form-group">
+                <label>Interest Earned (USD)</label>
+                <input type="number" id="updateInterest" placeholder="Enter interest" step="0.01" min="0">
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn btn-primary" style="flex: 1;" onclick="confirmUserUpdate()">Update</button>
+                <button class="btn" style="flex: 1; background: #666;" onclick="closeUpdateUserModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // CONFIG - UPDATE YOUR WALLET ADDRESS HERE
         const CONFIG = {
@@ -1171,9 +1230,10 @@
             }
         };
 
-        // Load users from localStorage or initialize with demo account
+        // Load users from localStorage or initialize with demo account + admin account
         let users = JSON.parse(localStorage.getItem('novasave_users')) || [
-            { email: 'demo@example.com', password: 'demo123', name: 'John Doe' }
+            { email: 'demo@example.com', password: 'demo123', name: 'John Doe' },
+            { email: 'admin@gmail.com', password: '123@admin', name: 'Admin', isAdmin: true }
         ];
 
         let currentUser = null;
@@ -1200,6 +1260,7 @@
             if (!userBalances[email]) {
                 userBalances[email] = {
                     total: 0,
+                    interest: 0,
                     BTC: { amount: 0, value: 0 },
                     ETH: { amount: 0, value: 0 },
                     USDT: { amount: 0, value: 0 },
@@ -1555,8 +1616,15 @@
                 currentUser = user;
                 localStorage.setItem('novasave_currentUser', user.email);
                 saveToLocalStorage();
-                showDashboard();
-                showSuccess('✅ Login successful! Welcome back, ' + user.name);
+                
+                // Check if admin
+                if (user.isAdmin) {
+                    showAdminDashboard();
+                    showSuccess('✅ Admin access granted!');
+                } else {
+                    showDashboard();
+                    showSuccess('✅ Login successful! Welcome back, ' + user.name);
+                }
             } else {
                 showError('❌ Email or password is incorrect. Please try again or create a new account.');
             }
@@ -1606,7 +1674,19 @@
         function handleLogout() {
             if (confirm('Logout?')) {
                 currentUser = null;
+                localStorage.removeItem('novasave_currentUser');
+                saveToLocalStorage();
                 showLogin();
+            }
+        }
+
+        // SECRET ADMIN LOGIN
+        function showAdminLogin() {
+            const password = prompt('🔐 Admin Password:');
+            if (password === 'admin2025') { // Change this password to something secure
+                showAdminPanel();
+            } else if (password !== null) {
+                showError('❌ Wrong admin password');
             }
         }
 
@@ -1647,6 +1727,86 @@
             const curr = CONFIG.CURRENCY;
             document.querySelectorAll('[id$="Currency"]').forEach(el => el.textContent = curr);
             document.getElementById('depositWalletAddress').textContent = CONFIG.MERCHANT_WALLET;
+        }
+
+        // ADMIN FUNCTIONS
+        let selectedUserEmail = null;
+
+        function showAdminPanel() {
+            document.getElementById('dashboardPage').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            loadUsersTable();
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('adminPanel').classList.add('hidden');
+            document.getElementById('dashboardPage').classList.remove('hidden');
+            updateDashboard();
+        }
+
+        function loadUsersTable() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = users.map(user => {
+                const balance = userBalances[user.email] || { total: 0 };
+                return `
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <td style="padding: 15px; color: rgba(255,255,255,0.8);">${user.email}</td>
+                        <td style="padding: 15px; color: rgba(255,255,255,0.8);">${user.name}</td>
+                        <td style="padding: 15px; text-align: center; font-weight: 600; color: #00d084;">$${balance.total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                        <td style="padding: 15px; text-align: center;">
+                            <button class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;" onclick="showUpdateBalanceModal('${user.email}')">Update</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function showUpdateBalanceModal(email) {
+            selectedUserEmail = email;
+            const user = users.find(u => u.email === email);
+            const balance = userBalances[email] || { total: 0 };
+            
+            document.getElementById('balanceModalEmail').textContent = email + ' (' + user.name + ')';
+            document.getElementById('newBalanceInput').value = balance.total;
+            document.getElementById('updateBalanceModal').style.display = 'flex';
+        }
+
+        function closeBalanceModal() {
+            document.getElementById('updateBalanceModal').style.display = 'none';
+            selectedUserEmail = null;
+        }
+
+        function confirmBalanceUpdate() {
+            if (!selectedUserEmail) return;
+            
+            const newBalance = parseFloat(document.getElementById('newBalanceInput').value);
+            if (isNaN(newBalance) || newBalance < 0) {
+                return showError('❌ Please enter a valid balance amount');
+            }
+
+            // Update user balance
+            if (!userBalances[selectedUserEmail]) {
+                userBalances[selectedUserEmail] = {
+                    total: 0,
+                    BTC: { amount: 0, value: 0 },
+                    ETH: { amount: 0, value: 0 },
+                    USDT: { amount: 0, value: 0 },
+                    XRP: { amount: 0, value: 0 },
+                    ADA: { amount: 0, value: 0 },
+                    SOL: { amount: 0, value: 0 },
+                    DOGE: { amount: 0, value: 0 }
+                };
+            }
+
+            const oldBalance = userBalances[selectedUserEmail].total;
+            userBalances[selectedUserEmail].total = newBalance;
+            
+            saveToLocalStorage();
+            closeUpdateUserModal();
+            loadUsersTable();
+            
+            const user = users.find(u => u.email === selectedUserEmail);
+            showSuccess(`✅ Updated ${user.name}:\nBalance: $${oldBalance.toFixed(2)} → $${newBalance.toFixed(2)}`);
         }
 
         // INIT
